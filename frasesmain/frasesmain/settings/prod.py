@@ -23,7 +23,7 @@ USE_TZ = True
 
 
 STATIC_URL = '/static/'
-# MEDIA_URL = 'http://imagenesdeamor.com.pe/media/'
+MEDIA_URL = 'http://frasesdeamor.com.pe/media/'
 
 STATIC_ROOT = BASE_DIR.child('static')
 MEDIA_ROOT = BASE_DIR.child('media')
