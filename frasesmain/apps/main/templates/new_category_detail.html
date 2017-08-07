@@ -1,0 +1,328 @@
+{% extends "base.html" %}
+{% load thumbnail %}
+{% load static from staticfiles %}
+
+{% block title %}
+	<title>{{ current_category.title_page }}</title>
+	<meta name="description" content="{{ current_category.meta_description }}" />
+	<meta name="title" content="{{ current_category.title_page }}" />
+	<link rel="canonical" href="http://imagenesdeamor.com.pe/{{ current_category.slug }}/">
+
+	<!-- FACEBOOK -->
+	<meta property="og:type" content="article">
+	<meta property="og:site_name" content="ImagenesDeAmor">
+	<meta property="og:title" content="{{ current_category.title_page }}">
+	<meta property="og:description" content="{{ current_category.meta_description }}">
+	<meta property="og:url" content="http://imagenesdeamor.com.pe/{{ current_category.slug }}/">
+	<meta property="og:image" content="{{ MEDIA_URL }}{{ current_category.opengraph }}">
+	<meta property="og:image:width" content="1260">
+	<meta property="og:image:height" content="630">
+
+	<!-- TWITTER -->
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:site" content="@imagenesDamor1">
+	<meta name="twitter:title" content="{{ current_category.title_page }}">
+	<meta name="twitter:description" content="{{ current_category.meta_description }}">
+	<meta name="twitter:image" content="{{ MEDIA_URL }}{{ current_category.opengraph }}">
+
+	<!-- google+ -->
+	<meta itemprop="name" content="{{ current_category.title_page }}">
+	<meta itemprop="description" content="{{ current_category.meta_description }}">
+	<meta itemprop="image" content="{{ MEDIA_URL }}{{ current_category.opengraph }}">
+{% endblock title %}
+
+{% block styles %}
+	<style>
+		.slogan {
+			text-align: center;
+			padding: 1em 0;
+			background-image: url("{{ MEDIA_URL }}{{ current_category.banner }}");
+			background: url("{{ MEDIA_URL }}{{ current_category.banner }}") no-repeat center; 
+			background-size: cover;
+		}
+
+		/* Style the links inside the navigation bar */
+		.topnav a {
+		    float: left;
+		    display: block;
+		    color: #f2f2f2;
+		    text-align: center;
+		    padding: .3em 1em;
+		    text-decoration: none;
+		    font-size: 14px;
+		}
+
+		/* Hide the link that should open and close the topnav on small screens */
+		.topnav .icon {
+		    display: none;
+		}
+
+		@media screen and (max-width: 800px) {
+		  .topnav a {display: none;}
+		  .topnav a.icon {
+		    float: right;
+		    display: block;
+		  }
+		}
+
+		@media screen and (max-width: 800px) {
+		  .topnav.responsive {
+		  	position: absolute;
+			background-color: rgba(0, 0, 0, 0.80);
+			width: 100%;
+			top: 50px;
+			left: 0;
+			z-index: 1;
+		  }
+
+		  .topnav.responsive a {
+		    float: none;
+		    display: block;
+		    padding: .7em 0;
+		  }
+		}
+	</style>
+{% endblock styles %}
+
+{% block content %}
+	<section class="slogan">
+		<header>
+			<div class="container">
+				<div class="row between">
+					<div class="menu__main">
+						<span class="menu__logo"><a href="{% url 'main:home' %}">Imágenes de Amor</a></span>
+					</div>
+
+					<div class="topnav" id="myTopnav">
+					{% for category in categories %}
+						<a href="{% url 'main:category_detail' category.slug %}">{{ category.name }}</a>
+					{% endfor %}
+					<a href="javascript:void(0);" class="icon" id="icon" onclick="myFunction()">&#9776;</a>
+				</div>
+				</div>
+			</div>
+		</header>
+
+		<div class="container">
+			<div class="row">
+				<div class="category__main">
+					<h1 class="slogan__title__h1">{{ current_category.title_page }}</h1>
+					<p class="slogan__description">{{ current_category.description_page }}</p>
+					<a class="category__main__button" href="#random_image">Ver imágenes</a>
+				</div>
+			</div>
+		</div>
+	</section>
+	
+	<section class="main_networks">
+		<div class="container">
+			<div class="row">
+				<div class="networks_list column">
+					<div class="networks_list__title">
+						<p>Compartir en</p>
+					</div>
+					<div class="row">
+						<div class="category__share facebook__share">
+							<a target="_blank" href="http://www.facebook.com/share.php?u=http://imagenesdeamor.com.pe{{ url }}">
+								<img class="facebook" src="{% static 'img/facebook-icon-white.png' %}?v1" alt="facebook">
+							</a>
+						</div>
+						<div class="category__share twitter__share">
+							<a target="_blank" href="http://twitter.com/intent/tweet?text=Encuentra las mejores imágenes de ositos tiernos para dedicar&url=http://imagenesdeamor.com.pe{{ url }}&via=imagenesDamor1">
+								<img class="twitter" src="{% static 'img/twitter-icon-white.png' %}?v1" alt="twitter">
+							</a>
+						</div>
+						<div class="category__share google__share">
+							<a target="_blank" href="https://plus.google.com/share?url=http://imagenesdeamor.com.pe{{ url }}">
+								<img class="google" src="{% static 'img/google-icon-white.png' %}?v1" alt="google">
+							</a>
+						</div>
+						<div class="category__share pinterest__share">
+							<a target="_blank" href="https://www.pinterest.com/pin/create/button/" data-pin-custom="true">
+								<img class="pinterest" src="{% static 'img/pinterest-icon-white.png' %}?v1" alt="pinterest">
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<div class="main_page">
+		<div class="container">
+			<div class="row">
+				
+				<section class="main_side">
+
+					<div id="random_image" class="article">
+						<div class="container">
+							<h2 class="category__subtitle">Imágenes aleatorias</h2>
+							<div class="row">
+								<div class="category__random">
+									<a id="image-random-link" target="_blank" href="{% url 'main:image_detail' random_image.post.category.slug random_image.post.slug random_image.slug %}">
+										<img id="image-random-img" src="{{ MEDIA_URL }}{{ random_image.image }}" alt="">
+									</a>
+									<div class="row category__random-image">
+										<button class="get-random-image">Ver otra imagen</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="article">
+						<div class="container">
+							<h2 class="category__subtitle">Imágenes destacadas</h2>
+							<div class="row">
+								<div class="category__list_images">
+									{% for image in top_6 %}
+										<div class="image__wrap">
+											<a target="_blank" href="{% url 'main:image_detail' image.post.category.slug image.post.slug image.slug %}">
+												<img class="category__image" src="{{ MEDIA_URL }}{{ image }}" alt="{{ image.description }}" title="{{ image.title }}">
+											</a>
+											<div class="row wrap__like">
+												<div class="fb-like" data-href="http://imagenesdeamor.com.pe/{{ image.post.category.slug }}/{{ image.post.slug }}/{{ image.slug }}/" data-layout="button_count" data-action="like" data-size="large" data-show-faces="false" data-share="false"></div>
+											</div>
+											<div class="row">
+												<div class="image__share facebook__share">
+													<a target="_blank" href="http://www.facebook.com/share.php?u=http://imagenesdeamor.com.pe/{{ image.post.category.slug }}/{{ image.post.slug }}/{{ image.slug }}/">
+														<img class="facebook" src="{% static 'img/facebook-icon-white.png' %}?v1" alt="facebook">
+													</a>
+												</div>
+												<div class="image__share twitter__share">
+													<a target="_blank" href="http://twitter.com/intent/tweet?text={{ image.title }}&url=http://imagenesdeamor.com.pe/{{ image.post.category.slug }}/{{ image.post.slug }}/{{ image.slug }}/&via=imagenesDamor1&hashtag=ImagenesDeAmor">
+														<img class="twitter" src="{% static 'img/twitter-icon-white.png' %}?v1" alt="twitter">
+													</a>
+												</div>
+												<div class="image__share google__share">
+													<a target="_blank" href="https://plus.google.com/share?url=http://imagenesdeamor.com.pe/{{ image.post.category.slug }}/{{ image.post.slug }}/{{ image.slug }}/">
+														<img class="google" src="{% static 'img/google-icon-white.png' %}?v1" alt="google">
+													</a>
+												</div>
+												{% if is_mobile %}
+												<div class="image__share messenger__share">
+													<a href="fb-messenger://share?app_id=1666763640005297&redirect_uri=http://imagenesdeamor.com.pe/{{ image.post.category.slug }}/{{ image.post.slug }}/&link=http://imagenesdeamor.com.pe/{{ image.post.category.slug }}/{{ image.post.slug }}/?ref=fbm">
+														<img class="messenger" src="{% static 'img/messenger-icon-white.png' %}?v1" alt="messenger">
+													</a>
+												</div>
+												<div class="image__share whatsapp__share">
+													<a href="whatsapp://send?text={{ image.title }} http://imagenesdeamor.com.pe/{{ image.post.category.slug }}/{{ image.post.slug }}/" data-action="share/whatsapp/share">
+														<img class="whatsapp" src="{% static 'img/whatsapp-icon-white.png' %}?v1" alt="whatsapp">
+													</a>
+												</div>
+												{% else %}
+												<div class="image__share messenger__share">
+													<a href="http://www.facebook.com/dialog/send?app_id=1666763640005297&redirect_uri=http://imagenesdeamor.com.pe/{{ image.post.category.slug }}/{{ image.post.slug }}/&link=http://imagenesdeamor.com.pe/{{ image.post.category.slug }}/{{ image.post.slug }}/{{ image.slug }}/?ref=fbm">
+														<img class="messenger" src="{% static 'img/messenger-icon-white.png' %}?v1" alt="messenger">
+													</a>
+												</div>
+												{% endif %}
+											</div>
+										</div>
+									{% endfor %}
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="article">
+						<div class="container">
+							<h2 class="category__subtitle">Subidas recientemente</h2>
+							<div class="row">
+								<div class="category__list_images">
+									{% for image in new_images %}
+										<div class="image__wrap">
+											<a target="_blank" href="{% url 'main:image_detail' image.post.category.slug image.post.slug image.slug %}">
+												<img class="category__image" src="{{ MEDIA_URL }}{{ image }}" alt="{{ image.description }}" title="{{ image.title }}">
+											</a>
+											<div class="row wrap__like">
+												<div class="fb-like" data-href="http://imagenesdeamor.com.pe/{{ image.post.category.slug }}/{{ image.post.slug }}/{{ image.slug }}/" data-layout="button_count" data-action="like" data-size="large" data-show-faces="false" data-share="false"></div>
+											</div>
+											<div class="row">
+												<div class="image__share facebook__share">
+													<a target="_blank" href="http://www.facebook.com/share.php?u=http://imagenesdeamor.com.pe/{{ image.post.category.slug }}/{{ image.post.slug }}/{{ image.slug }}/">
+														<img class="facebook" src="{% static 'img/facebook-icon-white.png' %}?v1" alt="facebook">
+													</a>
+												</div>
+												<div class="image__share twitter__share">
+													<a target="_blank" href="http://twitter.com/intent/tweet?text={{ image.title }}&url=http://imagenesdeamor.com.pe/{{ image.post.category.slug }}/{{ image.post.slug }}/{{ image.slug }}/&via=imagenesDamor1&hashtag=ImagenesDeAmor">
+														<img class="twitter" src="{% static 'img/twitter-icon-white.png' %}?v1" alt="twitter">
+													</a>
+												</div>
+												<div class="image__share google__share">
+													<a target="_blank" href="https://plus.google.com/share?url=http://imagenesdeamor.com.pe/{{ image.post.category.slug }}/{{ image.post.slug }}/{{ image.slug }}/">
+														<img class="google" src="{% static 'img/google-icon-white.png' %}?v1" alt="google">
+													</a>
+												</div>
+												{% if is_mobile %}
+												<div class="image__share messenger__share">
+													<a href="fb-messenger://share?app_id=1666763640005297&redirect_uri=http://imagenesdeamor.com.pe/{{ image.post.category.slug }}/{{ image.post.slug }}/&link=http://imagenesdeamor.com.pe/{{ image.post.category.slug }}/{{ image.post.slug }}/?ref=fbm">
+														<img class="messenger" src="{% static 'img/messenger-icon-white.png' %}?v1" alt="messenger">
+													</a>
+												</div>
+												<div class="image__share whatsapp__share">
+													<a href="whatsapp://send?text={{ image.title }} http://imagenesdeamor.com.pe/{{ image.post.category.slug }}/{{ image.post.slug }}/" data-action="share/whatsapp/share">
+														<img class="whatsapp" src="{% static 'img/whatsapp-icon-white.png' %}?v1" alt="whatsapp">
+													</a>
+												</div>
+												{% else %}
+												<div class="image__share messenger__share">
+													<a href="http://www.facebook.com/dialog/send?app_id=1666763640005297&redirect_uri=http://imagenesdeamor.com.pe/{{ image.post.category.slug }}/{{ image.post.slug }}/&link=http://imagenesdeamor.com.pe/{{ image.post.category.slug }}/{{ image.post.slug }}/{{ image.slug }}/?ref=fbm">
+														<img class="messenger" src="{% static 'img/messenger-icon-white.png' %}?v1" alt="messenger">
+													</a>
+												</div>
+												{% endif %}
+											</div>
+										</div>
+									{% endfor %}
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="article">
+						<div class="container">
+							<h2 class="category__subtitle">Videos de {{ current_category.name }}</h2>
+							<div class="video-container">
+								<iframe width="560" height="315" src="https://www.youtube.com/embed/{{ current_category.video_id }}" frameborder="0" allowfullscreen></iframe>
+							</div>
+							<div class="row category__random-image">
+								<a target="_blank" href="https://www.youtube.com/watch?v={{ current_category.video_id }}&list={{ current_category.list_id }}">Ver más videos</a>
+							</div>
+						</div>
+					</div>
+
+
+					<div class="post_related">
+						<div class="container">
+							<div class="post_related__row">
+								{% for post in posts %}
+									<div class="image__item__category">
+										<a href="{% url 'main:post_detail' post.category.slug post.slug %}">
+											{% thumbnail post.image "180" crop="center" as im %}
+												<img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" />
+											{% endthumbnail %}
+										</a>
+										<div class="image__item__title__detail">
+											<a href="{% url 'main:post_detail' post.category.slug post.slug %}">
+												<p>{{ post.title }}</p>
+											</a>
+										</div>
+									</div>
+								{% endfor %}
+							</div>
+						</div>
+					</div>
+				</section>
+			</div>
+		</div>
+{% endblock content %}
+
+{% block scripts %}
+	<script>
+	var categorySlug = "{{ current_category.slug }}";
+	var MEDIA_URL = "{{ MEDIA_URL }}";
+	</script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script async src="{% static 'js/home.js' %}?v3"></script>
+{% endblock scripts %}

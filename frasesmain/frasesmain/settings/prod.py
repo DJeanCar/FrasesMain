@@ -2,7 +2,7 @@ from .base import *
 
 DEBUG = False
 
-ALLOWED_HOSTS = ['35.162.143.202']
+ALLOWED_HOSTS = ['frasesdeamor.com.pe']
 
 DATABASES = {
     'default': {
@@ -21,5 +21,9 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
+
 STATIC_URL = '/static/'
+# MEDIA_URL = 'http://imagenesdeamor.com.pe/media/'
+
 STATIC_ROOT = BASE_DIR.child('static')
+MEDIA_ROOT = BASE_DIR.child('media')

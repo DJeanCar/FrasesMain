@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+{% load thumbnail %}
+{% load static from staticfiles %}
+{% block title %}
+	<title>Imágenes de amor con bonitas frases románticas para dedicar</title>
+	<meta name="description" content="Mira y descarga todas la imágenes de amor que tenemos para dedicar: bonitas frases, corazones, ositos, perritos, gatitos, rosas y besos." />
+	<meta name="google" value="notranslate" />
+	<link rel="canonical" href="http://imagenesdeamor.com.pe/">
+{% endblock title %}
+
+{% block styles %}
+	<style>
+		.slogan {
+			text-align: center;
+			padding: 1em 0;
+			background: url("{% static 'img/home_banner.png' %}") no-repeat center; 
+			background-size: cover;
+		}
+
+		/* Style the links inside the navigation bar */
+		.topnav a {
+		    float: left;
+		    display: block;
+		    color: #f2f2f2;
+		    text-align: center;
+		    padding: .3em 1em;
+		    text-decoration: none;
+		    font-size: 14px;
+		}
+
+		/* Hide the link that should open and close the topnav on small screens */
+		.topnav .icon {
+		    display: none;
+		}
+
+		@media screen and (max-width: 800px) {
+		  .topnav a {display: none;}
+		  .topnav a.icon {
+		    float: right;
+		    display: block;
+		  }
+		}
+
+		@media screen and (max-width: 800px) {
+		  .topnav.responsive {
+		  	position: absolute;
+			background-color: rgba(0, 0, 0, 0.80);
+			width: 100%;
+			top: 50px;
+			left: 0;
+			z-index: 1;
+		  }
+
+		  .topnav.responsive a {
+		    float: none;
+		    display: block;
+		    padding: .7em 0;
+		  }
+		}
+	</style>
+{% endblock styles %}	
+
+{% block content %}
+	{{ block.super }}
+	<section class="slogan">
+		<header>
+			<div class="container">
+				<div class="row between">
+					<div class="menu__main">
+						<span class="menu__logo"><a href="{% url 'main:home' %}">Frases de Amor</a></span>
+					</div>
+
+					<div class="topnav" id="myTopnav">
+					{% for category in categories %}
+						<a href="{% url 'main:category_detail' category.slug %}">{{ category.name }}</a>
+					{% endfor %}
+					<a href="javascript:void(0);" class="icon" id="icon" onclick="myFunction()">&#9776;</a>
+				</div>
+				</div>
+			</div>
+		</header>
+
+		<div class="container">
+			<div class="row">
+				<div class="home__header">
+					<h1 class="slogan__title__h1">Frases de amor</h1>
+					<p class="slogan__description">Encuentra las mejores frases en un solo lugar, frases de amor, frases de amistad, frases de desamor, frases de cumpleaños y muchas más</p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section class="main_networks">
+		<div class="container">
+			<div class="row">
+				<div class="networks_list column">
+					<div class="networks_list__title">
+						<p>Síguenos en nuestras redes sociales</p>
+					</div>
+					<div class="row">
+						<div class="fb-like" data-href="https://www.facebook.com/Frases-de-amor-para-dedicar-129739390969207/" data-layout="button_count" data-action="like" data-size="large" data-show-faces="false" data-share="false"></div>
+						<a href="https://twitter.com/frasesDamorr2" class="twitter-follow-button" data-show-count="false" data-size="large" data-show-screen-name="false">Follow @frasesDamorr2</a>
+						<div class="g-plusone" data-annotation="none" data-href="https://plus.google.com/u/0/104762153762212542255"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section class="images">
+		<div class="container">
+			<div class="row page_content">
+				<section class="left_side_category_detail">
+					<div class="categories">
+						<ul class="categories__list__detail">
+							<li class="category__item">
+								<a href="{% url 'main:home' %}">Inicio</a>
+							</li>
+							{% for category in categories %}
+								<li class="category__item">
+									<a href="{% url 'main:category_detail' category.slug %}">{{ category.name }}</a>
+								</li>
+							{% endfor %}
+						</ul>
+					</div>
+				</section>
+				<section class="image_list">
+					{% for post in posts %}
+						<div class="image__item__detail">
+							<a href="{% url 'main:post_detail' post.category.slug post.slug %}">
+								{% thumbnail post.image "180" crop="center" as im %}
+									<img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" />
+								{% endthumbnail %}
+							</a>
+							<div class="image__item__title__detail">
+								<a href="{% url 'main:post_detail' post.category.slug post.slug %}">
+									<p>{{ post.title }}</p>
+								</a>
+								<p class="post_description">
+								{% with description=post.summary|safe %}
+									{{ description|slice:"150" }}
+								{% endwith %}
+								</p>
+							</div>
+						</div>
+					{% endfor %}
+				</section>
+				<section class="right_side">
+					<div class="networks">
+						<div class="fb-page" 
+						  data-href="https://www.facebook.com/Frases-de-amor-para-dedicar-129739390969207/"
+						  data-width="300" 
+						  data-hide-cover="false"
+						  data-show-facepile="false" 
+						  data-show-posts="false"></div>
+					</div>
+				</section>
+			</div>
+		</div>
+	</section>
+{% endblock content %}
+
+{% block scripts %}
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="{% static 'js/home.js' %}?v3"></script>
+{% endblock scripts %}

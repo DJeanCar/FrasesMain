@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+{% load thumbnail %}
+{% load static from staticfiles %}
+
+{% block title %}
+	<title>{{ image.title }}</title>
+	<meta name="description" content="{{ image.meta_description }}">
+	<meta name="google" value="notranslate">
+	<link rel="canonical" href="http://imagenesdeamor.com.pe/{{ category.slug }}/{{ post.slug }}/{{ image.slug }}/">
+
+	<!-- FACEBOOK -->
+	<meta property="og:type" content="article">
+	<meta property="og:site_name" content="ImagenesDeAmor">
+	<meta property="og:title" content="{{ image.title }}">
+	<meta property="og:description" content="{{ image.meta_description }}">
+	<meta property="og:url" content="http://imagenesdeamor.com.pe/{{ category.slug }}/{{ post.slug }}/{{ image.slug }}/">
+	<meta property="og:image" content="{{ MEDIA_URL }}{{ image.image }}">
+	<meta property="og:image:height" content="800">
+	<meta property="og:image:width" content="800">
+	<meta property="fb:app_id" content="1666763640005297">
+
+	<!-- TWITTER -->
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:site" content="@imagenesDamor1">
+	<meta name="twitter:title" content="{{ image.title }}">
+	<meta name="twitter:description" content="{{ image.meta_description }}">
+	<meta name="twitter:image" content="{{ MEDIA_URL }}{{ image.image }}">
+
+	<!-- google+ -->
+	<meta itemprop="name" content="{{ image.title }}">
+	<meta itemprop="description" content="{{ image.meta_description }}">
+	<meta itemprop="image" content="{{ MEDIA_URL }}{{ image.image }}">
+{% endblock title %}
+
+
+{% block content %}
+{{ block.super }}
+<div class="main_page">
+	<div class="container">
+		<div class="row">
+			<section class="main_side">
+				<div class="article">
+					<div class="container">
+						<div>
+							<div class="article__header">
+								<div class="article__title__wrap">
+									<div class="article__category">
+										<p>
+											<a class="article__link" href="{% url 'main:home' %}">Imágenes de amor</a>
+											<span class="article_text_secondary">></span>
+											<a href="{% url 'main:category_detail' category.slug %}" class="article__link">{{ category.name }}</a>
+											<span class="article_text_secondary">></span>
+											<a href="{% url 'main:post_detail' category.slug post.slug %}" class="article__link">{{ post.title }}</a>
+										</p>
+									</div>
+									<div>
+										<h1 class="article__title">{{ image.title }}</h1>
+									</div>
+								</div>
+								<div class="row random-image">
+									<a href="{% url 'main:image_detail' random_image.post.category.slug random_image.post.slug random_image.slug %}">Ver otra imagen</a>
+								</div>
+								<div class="article__list_images">
+									<div class="image__wrap">
+										<img class="image-detail" src="{{ MEDIA_URL }}{{ image.image }}">
+										<div class="row wrap__like">
+											<div class="fb-like" data-href="http://imagenesdeamor.com.pe/{{ image.post.category.slug }}/{{ image.post.slug }}/{{ image.slug }}/" data-layout="button_count" data-action="like" data-size="large" data-show-faces="false" data-share="false"></div>
+										</div>
+										<div class="row">
+											<div class="image__share facebook__share">
+												<a target="_blank" href="http://www.facebook.com/share.php?u=http://imagenesdeamor.com.pe/{{ image.post.category.slug }}/{{ image.post.slug }}/{{ image.slug }}/">
+													<img class="facebook" src="{% static 'img/facebook-icon-white.png' %}?v1" alt="facebook">
+												</a>
+											</div>
+											<div class="image__share twitter__share">
+												<a target="_blank" href="http://twitter.com/intent/tweet?text={{ image.title }}&url=http://imagenesdeamor.com.pe/{{ image.post.category.slug }}/{{ image.post.slug }}/{{ image.slug }}/&via=imagenesDamor1&hashtag=ImagenesDeAmor">
+													<img class="twitter" src="{% static 'img/twitter-icon-white.png' %}?v1" alt="twitter">
+												</a>
+											</div>
+											<div class="image__share google__share">
+												<a target="_blank" href="https://plus.google.com/share?url=http://imagenesdeamor.com.pe/{{ image.post.category.slug }}/{{ image.post.slug }}/{{ image.slug }}/">
+													<img class="google" src="{% static 'img/google-icon-white.png' %}?v1" alt="google">
+												</a>
+											</div>
+											{% if is_mobile %}
+											<div class="image__share messenger__share">
+												<a href="fb-messenger://share?app_id=1666763640005297&redirect_uri=http://imagenesdeamor.com.pe/{{ image.post.category.slug }}/{{ image.post.slug }}/&link=http://imagenesdeamor.com.pe/{{ image.post.category.slug }}/{{ image.post.slug }}/?ref=fbm">
+													<img class="messenger" src="{% static 'img/messenger-icon-white.png' %}?v1" alt="messenger">
+												</a>
+											</div>
+											<div class="image__share whatsapp__share">
+												<a href="whatsapp://send?text={{ image.title }} http://imagenesdeamor.com.pe/{{ image.post.category.slug }}/{{ image.post.slug }}/" data-action="share/whatsapp/share">
+													<img class="whatsapp" src="{% static 'img/whatsapp-icon-white.png' %}?v1" alt="whatsapp">
+												</a>
+											</div>
+											{% else %}
+											<div class="image__share messenger__share">
+												<a href="http://www.facebook.com/dialog/send?app_id=1666763640005297&redirect_uri=http://imagenesdeamor.com.pe/{{ image.post.category.slug }}/{{ image.post.slug }}/&link=http://imagenesdeamor.com.pe/{{ image.post.category.slug }}/{{ image.post.slug }}/{{ image.slug }}/?ref=fbm">
+													<img class="messenger" src="{% static 'img/messenger-icon-white.png' %}?v1" alt="messenger">
+												</a>
+											</div>
+											{% endif %}
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="description">
+								<p>{{ image.description }}</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="post_related">
+					<div class="container">
+						<div class="post_related__row">
+							{% for image in more_images %}
+								{% if image.post %}
+									<div class="post_related__image__item">
+										<div class="post_related__image">
+											{% thumbnail image "140" crop="center" as im %}
+												<a href="{% url 'main:image_detail' image.post.category.slug image.post.slug image.slug %}">
+													<img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" />
+												</a>
+											{% endthumbnail %}
+										</div>
+										<div class="image__item__title">
+											<a href="{% url 'main:image_detail' image.post.category.slug image.post.slug image.slug %}">
+												<p>{{ image.title }}</p>
+											</a>
+										</div>
+									</div>
+								{% endif %}
+							{% endfor %}
+						</div>
+					</div>
+				</div>
+			</section>
+
+		</div>
+	</div>
+</div>
+{% endblock content %}
+
+{% block scripts %}
+	<script async src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<!-- <script async src="{% static 'js/main.js' %}?v2"></script>
+	<script async src="{% static 'js/home.js' %}?v1"></script> -->
+	<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+{% endblock scripts %}
