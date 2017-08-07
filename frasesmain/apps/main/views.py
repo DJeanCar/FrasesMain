@@ -25,7 +25,7 @@ class CategoryDetail(TemplateView):
 		current_category.save()
 		context['current_category'] = current_category
 		context['categories'] = Category.objects.filter(public=True).order_by('-created_at')
-		context['posts'] = Post.objects.filter(category=current_category).order_by('-created_at')
+		context['posts'] = Post.objects.filter(category=current_category, public=True).order_by('-created_at')
 		return context
 
 class PostDetail(TemplateView):
@@ -35,7 +35,7 @@ class PostDetail(TemplateView):
 	def get_context_data(self, **kwargs):
 		context = super(PostDetail, self).get_context_data(**kwargs)
 		category = get_object_or_404(Category, slug=kwargs['category'])
-		post = get_object_or_404(Post, slug=kwargs['slug'])
+		post = get_object_or_404(Post, slug=kwargs['slug'], public=True)
 		post.seen += 1
 		post.save()
 		context['category'] = category
