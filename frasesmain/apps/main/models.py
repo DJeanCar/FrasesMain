@@ -44,7 +44,7 @@ class Phrase(models.Model):
 	updated_at = models.DateTimeField(auto_now=True)
 
 	def __str__(self):
-		return self.phrase
+		return "%s - %s" % (self.category, self.phrase)
 
 
 class Post(models.Model):
